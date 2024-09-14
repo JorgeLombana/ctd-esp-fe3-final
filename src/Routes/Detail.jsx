@@ -1,18 +1,28 @@
-import React from 'react'
+import React, { useEffect, useState, useContext } from 'react'
+import { useParams } from 'react-router-dom'
+import { GlobalContext } from '../Components/utils/global.context'
 
+function Detail() {
+  const { id } = useParams()
+  const { state } = useContext(GlobalContext);
+  const [dentist, setDentist] = useState(null);
 
-//Este componente debera ser estilado como "dark" o "light" dependiendo del theme del Context
+  useEffect(() => {
+    fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+      .then(response => response.json())
+      .then(data => setDentist(data));
+  }, [id]);
 
-const Detail = () => {
- 
-  // Consumiendo el parametro dinamico de la URL deberan hacer un fetch a un user en especifico
+  if (!dentist) return <div>Loading...</div>;
 
   return (
-    <>
-      <h1>Detail Dentist id </h1>
-      {/* aqui deberan renderizar la informacion en detalle de un user en especifico */}
-      {/* Deberan mostrar el name - email - phone - website por cada user en especifico */}
-    </>
+    <div className={`detail ${state.theme}`}>
+      <h1>Dentist Detail</h1>
+      <p>Name: {dentist.name}</p>
+      <p>Email: {dentist.email}</p>
+      <p>Phone: {dentist.phone}</p>
+      <p>Website: {dentist.website}</p>
+    </div>
   )
 }
 

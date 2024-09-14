@@ -1,22 +1,30 @@
-import React from "react";
+import React, { useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { GlobalContext } from '../Components/utils/global.context'
 
+function Card({ dentist }) {
+  const { state, dispatch } = useContext(GlobalContext);
 
-const Card = ({ name, username, id }) => {
+  const isFavorite = state.favorites.some(fav => fav.id === dentist.id);
 
-  const addFav = ()=>{
-    // Aqui iria la logica para agregar la Card en el localStorage
-  }
+  const toggleFavorite = () => {
+    if (isFavorite) {
+      dispatch({ type: 'REMOVE_FAVORITE', payload: dentist });
+    } else {
+      dispatch({ type: 'ADD_FAVORITE', payload: dentist });
+    }
+  };
 
   return (
-    <div className="card">
-        {/* En cada card deberan mostrar en name - username y el id */}
-
-        {/* No debes olvidar que la Card a su vez servira como Link hacia la pagina de detalle */}
-
-        {/* Ademas deberan integrar la logica para guardar cada Card en el localStorage */}
-        <button onClick={addFav} className="favButton">Add fav</button>
+    <div className={`card ${state.theme}`}>
+      <h2>{dentist.name}</h2>
+      <p>{dentist.username}</p>
+      <Link to={`/dentist/${dentist.id}`}>View Details</Link>
+      <button onClick={toggleFavorite}>
+        {isFavorite ? 'Remove from Favs' : 'ADD FAV'}
+      </button>
     </div>
-  );
-};
+  )
+}
 
-export default Card;
+export default Card

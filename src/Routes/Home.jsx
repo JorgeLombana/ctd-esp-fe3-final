@@ -1,16 +1,28 @@
-import React from 'react'
+import React, { useContext, useMemo } from 'react'
+import { Link } from 'react-router-dom'
+import { GlobalContext } from '../Components/utils/global.context'
 import Card from '../Components/Card'
 
-//Este componente debera ser estilado como "dark" o "light" dependiendo del theme del Context
+function Home() {
+  const { state } = useContext(GlobalContext);
 
-const Home = () => {
+  const dentistCards = useMemo(() => {
+    return state.dentists.map(dentist => (
+      <Card key={dentist.id} dentist={dentist} />
+    ));
+  }, [state.dentists]);
+
   return (
-    <main className="" >
+    <div className={`home ${state.theme}`}>
       <h1>Home</h1>
-      <div className='card-grid'>
-        {/* Aqui deberias renderizar las cards */}
+      <div className="card-grid" style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+        gap: '1rem'
+      }}>
+        {dentistCards}
       </div>
-    </main>
+    </div>
   )
 }
 

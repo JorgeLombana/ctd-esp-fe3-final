@@ -1,14 +1,26 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
+import { GlobalContext } from '../Components/utils/global.context'
 import Form from '../Components/Form'
 
-//Este componente debera ser estilado como "dark" o "light" dependiendo del theme del Context
+function Contact() {
+  const { state } = useContext(GlobalContext);
+  const [submitted, setSubmitted] = useState(false);
+  const [submittedName, setSubmittedName] = useState('');
 
-const Contact = () => {
+  const handleSubmit = (formData) => {
+    console.log('Form submitted:', formData);
+    setSubmittedName(formData.name);
+    setSubmitted(true);
+  };
+
   return (
-    <div>
-      <h2>Want to know more?</h2>
-      <p>Send us your questions and we will contact you</p>
-      <Form/>
+    <div className={`contact ${state.theme}`}>
+      <h1>Contact Us</h1>
+      {submitted ? (
+        <p>Gracias {submittedName}, te contactaremos cuando antes vía mail</p>
+      ) : (
+        <Form onSubmit={handleSubmit} />
+      )}
     </div>
   )
 }
